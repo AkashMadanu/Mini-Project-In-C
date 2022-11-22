@@ -1,0 +1,209 @@
+#include<stdio.h>
+
+void readDetails();
+void BinarySearch();
+void Bill();
+void Details();
+
+#define RED "\e[0;31m"
+#define LIME "\e[1;32m"
+#define CYAN "\e[0;36m"
+#define UGREEN "\e[4;32m"
+#define YELLOW "\e[0;33m"
+#define reset "\e[0m"
+#define TOMATO "\e[1;31m"
+//Decleration 
+       int choice,exit,numberOfCustomers,search,mid;
+    
+       char cont;
+       int customerID[10];
+       char customerType[10];
+       int medicineID[10];
+       char medicineName[10];
+       int quantityOfMedicine[10];
+       int GST[10];
+       int totalBill[10];
+       int price[10];
+       int  regularDiscount[10];
+
+
+int main()
+{   
+       printf(RED "***************************************************************************************\n" reset);
+       printf(LIME"<<<<<<<<<<<<<<<<<<<<"CYAN ".......""|||" CYAN "....." YELLOW "PHARMACY MANAGEMANT"CYAN "....." "|||" CYAN "......."LIME ">>>>>>>>>>>>>>>>>>\n" reset);
+       printf(RED "***************************************************************************************\n" reset);
+
+       printf( "          Enter the number of Customers                       : ");
+
+       scanf("%d",&numberOfCustomers);
+
+do{
+        
+        printf("          Enter 1 to Read Details\n");
+        printf("          Enter 2 for Bill Calculation\n");
+        printf("          Enter 3 Print Details\n");
+    
+       
+        scanf("%d",&choice);
+
+        switch (choice)
+        {
+        case 1:
+            readDetails();
+            break;
+        case 2 :
+                BinarySearch();
+                Bill();
+               
+            break;
+        case 3 :
+                BinarySearch();
+                Details();
+                break;
+             
+        default:
+        printf(RED "          -------------------------Invalid-------------------------\n" reset);
+            break;
+        }
+        printf("Press 'Y' to continue\n ");
+        scanf(" %c",&cont);
+} while (cont=='Y');
+       
+	printf("\n          --------------------Thank you!!!-----------------");
+
+
+       return 0;
+}
+
+void readDetails()
+{
+       for(int i = 0; i<numberOfCustomers; i++)
+       {
+             printf("          Enter the Customer ID                               : ");
+             scanf("%d",&customerID[i]);
+
+             printf("          Enter customer Type (Regular - R and Temporary -T   : ");
+             scanf(" %c",&customerType[i]);
+
+             printf("          Enter the Medicine ID :                             : ");
+             scanf("%d",&medicineID[i]);
+
+
+             printf("          Enter Medicine name \n          P - paracetamol,\n          L - Levocitrizine,\n          R - Rantac,\n          A - Amoxicillin                                     : ");
+             scanf(" %c",&medicineName[i]);
+
+             printf("          Enter the quantity of medicine to be purchased      :");
+             scanf("%d",&quantityOfMedicine[i]);
+
+             if(medicineName[i]=='P')
+             {
+                 price[i] = (quantityOfMedicine[i] * 5);
+             }
+              else if(medicineName[i]=='L')
+             {
+                price[i] = (quantityOfMedicine[i] * 2); 
+             }
+            else if(medicineName[i]=='R')
+             {
+                price[i] = (quantityOfMedicine[i] * 2); 
+             }
+            else if(medicineName[i]=='A')
+             {
+                price[i] = (quantityOfMedicine[i] * 10); 
+             }
+             else
+             {
+                 printf(RED "          Invalid Medicine Name!\n" reset);
+             }
+
+            printf(CYAN "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" reset);
+         } 
+}
+
+void BinarySearch()
+{
+              
+//       Asking user to search for the Customer ID
+        re:
+         printf("\n"TOMATO"          Enter the Customer ID for search                     :                    " reset);
+         scanf("%d",&search);
+    
+         int left=0,right=numberOfCustomers-1;
+
+         while (left<=right)
+         {
+             mid = (left+right)/2;
+            if(search==customerID[mid])
+            {
+
+                break;
+            }
+            else if(search<customerID[mid])
+            {
+                
+                right = mid-1;
+            }
+            else if(search>customerID[mid])
+            {
+                left = mid+1;
+            }
+            else
+            {
+               printf(RED "          ERROR IN BINARY SEARCH...\n" reset);
+            }
+   
+         }
+
+         if(search!=customerID[mid])
+            {
+                
+                printf(RED "          The Searched ID : %d is not found in the list\n" ,search );
+                goto re;
+
+                reset;
+            }
+}
+
+void Bill()
+{
+   
+    for(int i=mid;i<numberOfCustomers;i++)
+        {
+        
+       //  GST Amount = (Original Cost x GST%)/100
+             GST[i] =  (price[i]*5)/100;
+             regularDiscount[i] = 0;
+             if(customerType[i]=='R')
+             {
+                 regularDiscount[i] = ((price[i] + GST[i] )*10) / 100;
+             }
+
+             totalBill[i] = GST[i] + price[i] - regularDiscount[i]; 
+
+             printf(RED "_______________________________________________________________________________________\n" reset);
+             printf("Price of the Medicine : %d\n",price[i]);
+             printf("GST : %d\n",GST[i]);
+             printf("Recgular Discount : %d\n",regularDiscount[i]);
+             printf("Total Price : %d\n", totalBill[i]);
+             printf(RED "_______________________________________________________________________________________\n" reset);
+
+
+             break;
+        }     
+        
+}
+
+void Details()
+{
+         for(int i=mid;i<numberOfCustomers;i++)
+                {
+                       printf(RED "_______________________________________________________________________________________\n" reset);
+                       printf("          Customer ID          : %d\n",customerID[i]);
+                       printf("          Customer Type        : %c\n",customerType[i]);
+                       printf("          Medicine ID          : %d\n",medicineID[i]);
+                       printf("          Quantity of Medicine : %d\n",quantityOfMedicine[i]);
+                       printf(RED "_______________________________________________________________________________________\n" reset);
+                      
+                   break;
+                }
+}
